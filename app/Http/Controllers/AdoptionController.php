@@ -70,4 +70,26 @@ class AdoptionController extends Controller
 
         return $pet;
     }
+
+    public function store( Request $request){
+        try {
+            // rebecer os dados via body
+            $data = $request->all();
+
+            $request->validate([
+                'name' => 'required|string|max:150',
+                'contact' => 'int',
+                'email' => 'email',
+                'cpf' => 'required|string',
+                'observations' => 'required|int',
+                'profile_id' => 'required|int',
+
+            ]);
+
+
+
+        } catch (\Exception $exception) {
+            return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+    }
 }
