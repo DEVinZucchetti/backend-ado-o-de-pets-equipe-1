@@ -8,14 +8,12 @@ use Illuminate\Database\Seeder;
 
 class InitialUser extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
         User::create([
             'name' => 'ADMIN',
-            'email' => 'henrique.douglas.costaa@gmail.com',
+            'email' => 'thiago_barroso@estudante.sesisenai.org.br',
             'password' => env("DEFAULT_PASSWORD"),
             'profile_id' => 1
         ]);
