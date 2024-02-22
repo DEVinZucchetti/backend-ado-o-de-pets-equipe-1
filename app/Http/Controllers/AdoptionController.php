@@ -15,7 +15,37 @@ use Symfony\Component\HttpFoundation\Response;
 class AdoptionController extends Controller
 {
     use HttpResponses;
+    public function indexAdoption(Request $request)
+    {
+        // Construindo a query base
+        $query = Adoption::query();
 
+        // Filtrando por nome, se fornecido
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        // Filtrando por email, se fornecido
+        if ($request->filled('email')) {
+            $query->where('email', $request->email);
+        }
+
+        // Filtrando por contato, se fornecido
+        if ($request->filled('contact')) {
+            $query->where('contact', 'like', '%' . $request->contact . '%');
+        }
+
+        // Filtrando por status da adoção, se fornecido
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Obtendo os resultados filtrados
+        $adocoes = $query->get();
+
+        // Retornando os resultados (ajuste conforme sua necessidade, ex.: view, json)
+        return response()->json($adocoes);
+    }
     public function index(Request $request)
     {
         try {
@@ -92,6 +122,40 @@ class AdoptionController extends Controller
         } catch (\Exception $exception) {
             return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    public function approved(Request $request){
+
+        $data = $request->all();
+
+        $request->validate([
+            'adoption_id' => 'intege|required',
+        ]);
+
+        $adoption = Adoption::find($data['$adoption_id']);
+
+        if (!$adoption) return $this->error('Dado não encontrado', Response::HTTP_NOT_FOUND);
+
+        $adoption->update(["status" => 'APROVADO']);
+        $adoption->save();
+
+       $people = People::create([
+
+            'name' => $adoption->name,
+            'email' => $adoption->email,
+            'cpf' => $adoption->cpf,
+            'contact' => $adoption->contact,
+
+        ]);
+
+        $client = Client::create([
+            "people_id" => $people->id,
+            'bonus' => true,
+        ]);
+
+        $pet = Pet::find($adoption->Pet->id);
+
+        $pet->update(["client_id" => $client->id]);
     }
 }
 

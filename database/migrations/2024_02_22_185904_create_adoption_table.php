@@ -17,9 +17,8 @@ return new class extends Migration
             $table->string('cpf');
             $table->string('email');
             $table->string('contact', 20);
-            $table->text('observations');
             $table->enum('status', ['PENDENTE', 'NEGADO','APROVADO']);
-            $table->text('observation');
+            $table->text('observations');
 
             $table->unsignedBigInteger('pets_id');
             $table->foreign('pets_id')->references('id')->on('pets');
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('adoptions');
+        Schema::dropIfExists('adoption');
     }
 };
