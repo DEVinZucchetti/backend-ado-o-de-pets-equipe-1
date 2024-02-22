@@ -57,4 +57,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('users', [UserController::class, 'index'])->middleware(['ability:create-users']);
 });
 
-
+Route::post('upload', [AdoptionController::class, 'upload']);

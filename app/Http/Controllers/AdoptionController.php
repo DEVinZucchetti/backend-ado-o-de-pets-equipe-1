@@ -157,6 +157,10 @@ class AdoptionController extends Controller
 
         $pet->update(["client_id" => $client->id]);
     }
+
+    public function upload(){
+        
+    }
 }
 
 
