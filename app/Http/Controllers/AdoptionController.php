@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\SendWelcomePet;
+use App\Models\Adoption;
 use App\Models\Client;
 use App\Models\People;
 use App\Models\Pet;
@@ -86,10 +87,12 @@ class AdoptionController extends Controller
 
             ]);
 
-
+            $adoption = Adoption::create(...$data, ['status' => 'PENDENTE']);
 
         } catch (\Exception $exception) {
             return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 }
+
+
